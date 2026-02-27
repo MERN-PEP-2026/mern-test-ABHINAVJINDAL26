@@ -39,3 +39,37 @@ Implement ANY ONE:
 • Search courses 
 • Filter courses 
 • Edit course
+
+---
+
+## Implemented Project
+
+### Tech Stack
+- Backend: Node.js, Express, MongoDB, Mongoose, JWT
+- Frontend: React + Vite
+
+### Completed Requirements
+- POST `/api/auth/register`
+- POST `/api/auth/login`
+- POST `/api/courses`
+- GET `/api/courses`
+- DELETE `/api/courses/:id`
+- Frontend pages: Register, Login, Courses Dashboard
+- Integration completed with dynamic course create/view/delete
+- Advanced feature implemented: Search courses
+
+## Run Locally
+
+### 1) Backend setup
+1. Go to `backend` folder
+2. Install dependencies: `npm install`
+3. Create `.env` file using `.env.example`
+4. Start server: `npm run dev`
+
+### 2) Frontend setup
+1. Go to `frontend` folder
+2. Install dependencies: `npm install`
+3. Create `.env` file using `.env.example`
+4. Start app: `npm run dev`
+
+Frontend runs on Vite dev server and calls backend via `VITE_API_URL`.
