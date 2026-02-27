@@ -1,25 +1,47 @@
+/*
+ * App.jsx — top-level route configuration
+ * Maps URL paths to their corresponding page components
+ */
 import { Navigate, Route, Routes } from "react-router-dom";
-import ProtectedRoute from "./components/ProtectedRoute";
+import AuthGate from "./components/ProtectedRoute";
+import SignIn from "./pages/LoginPage";
+import SignUp from "./pages/RegisterPage";
+import DashboardPage from "./pages/DashboardPage";
 import CoursesPage from "./pages/CoursesPage";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
+import AddCoursePage from "./pages/AddCoursePage";
 
-const App = () => {
+function App() {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/register" replace />} />
-      <Route path="/register" element={<RegisterPage />} />
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<SignUp />} />
+      <Route path="/login" element={<SignIn />} />
+      <Route
+        path="/dashboard"
+        element={
+          <AuthGate>
+            <DashboardPage />
+          </AuthGate>
+        }
+      />
       <Route
         path="/courses"
         element={
-          <ProtectedRoute>
+          <AuthGate>
             <CoursesPage />
-          </ProtectedRoute>
+          </AuthGate>
+        }
+      />
+      <Route
+        path="/add-course"
+        element={
+          <AuthGate>
+            <AddCoursePage />
+          </AuthGate>
         }
       />
     </Routes>
   );
-};
+}
 
 export default App;
