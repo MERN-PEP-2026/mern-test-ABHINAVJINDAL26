@@ -1,7 +1,4 @@
-/*
- * SignUp.jsx — new student registration view
- * Collects name, email, password and creates an account via API
- */
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import httpClient, { applyToken } from "../api/client";

@@ -1,7 +1,4 @@
-/*
- * SignIn.jsx — student login view
- * Collects email and password, authenticates via API, stores session
- */
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import httpClient, { applyToken } from "../api/client";

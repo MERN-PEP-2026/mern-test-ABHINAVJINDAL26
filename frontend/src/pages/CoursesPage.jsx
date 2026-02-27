@@ -1,7 +1,4 @@
-/*
- * CoursesPage.jsx — displays all courses with accordion reveal
- * Description is hidden until the student clicks a course row
- */
+
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import httpClient, { applyToken } from "../api/client";

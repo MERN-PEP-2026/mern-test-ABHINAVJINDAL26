@@ -1,7 +1,3 @@
-/*
- * AddCoursePage.jsx — standalone form for creating a new course
- * Shows a success toast after persisting, with nav to other views
- */
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import httpClient, { applyToken } from "../api/client";

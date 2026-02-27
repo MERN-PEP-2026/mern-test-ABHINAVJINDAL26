@@ -1,7 +1,4 @@
-/*
- * DashboardPage.jsx — main landing page after sign-in
- * Shows project overview, user greeting, and navigation to features
- */
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import httpClient, { applyToken } from "../api/client";

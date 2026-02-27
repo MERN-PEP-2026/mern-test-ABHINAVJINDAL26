@@ -1,4 +1,4 @@
-/* AuthGate — redirects unauthenticated visitors to sign-in */
+
 import { Navigate } from "react-router-dom";
 
 function AuthGate({ children }) {

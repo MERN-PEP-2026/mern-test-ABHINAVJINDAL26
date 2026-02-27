@@ -1,7 +1,3 @@
-/*
- * App.jsx — top-level route configuration
- * Maps URL paths to their corresponding page components
- */
 import { Navigate, Route, Routes } from "react-router-dom";
 import AuthGate from "./components/ProtectedRoute";
 import SignIn from "./pages/LoginPage";
