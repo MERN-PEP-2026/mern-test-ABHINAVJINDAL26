@@ -1,25 +1,14 @@
+/*
+ * CourseModel.js — schema for academic courses
+ * Each course is linked to the student who created it
+ */
 import mongoose from "mongoose";
 
-const courseSchema = new mongoose.Schema({
-  courseName: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  courseDescription: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  instructor: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+const courseBlueprint = new mongoose.Schema({
+  courseName: { type: String, required: true, trim: true },
+  courseDescription: { type: String, required: true, trim: true },
+  instructor: { type: String, required: true, trim: true },
+  createdAt: { type: Date, default: Date.now },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Student",
@@ -27,6 +16,6 @@ const courseSchema = new mongoose.Schema({
   },
 });
 
-const Course = mongoose.model("Course", courseSchema);
+const CourseModel = mongoose.model("Course", courseBlueprint);
 
-export default Course;
+export default CourseModel;

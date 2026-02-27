@@ -1,11 +1,12 @@
+/* courseRoutes.js — maps course endpoints to their handlers */
 import express from "express";
-import { createCourse, deleteCourse, getCourses } from "../controllers/courseController.js";
-import protect from "../middleware/authMiddleware.js";
+import { addCourse, listCourses, removeCourse } from "../controllers/courseController.js";
+import verifyAccess from "../middleware/authMiddleware.js";
 
-const router = express.Router();
+const courseRouter = express.Router();
 
-router.post("/", protect, createCourse);
-router.get("/", protect, getCourses);
-router.delete("/:id", protect, deleteCourse);
+courseRouter.post("/", verifyAccess, addCourse);
+courseRouter.get("/", verifyAccess, listCourses);
+courseRouter.delete("/:id", verifyAccess, removeCourse);
 
-export default router;
+export default courseRouter;
