@@ -1,0 +1,2 @@
+Frontend_URL: https://mern-test-abhinavjindal-26.vercel.app/
+Backend_URL:  https://mern-test-abhinavjindal26.onrender.com
