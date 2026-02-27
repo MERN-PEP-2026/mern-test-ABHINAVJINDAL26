@@ -1,21 +1,26 @@
+/*
+ * authMiddleware.js — JWT verification gate
+ * Blocks unauthenticated requests and attaches userId to req
+ */
 import jwt from "jsonwebtoken";
 
-const protect = (req, res, next) => {
-  const authHeader = req.headers.authorization;
+function verifyAccess(req, res, next) {
+  const header = req.headers.authorization;
 
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Unauthorized" });
+  /* check for Bearer token in the Authorization header */
+  if (!header || !header.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Access denied — no token" });
   }
 
-  const token = authHeader.split(" ")[1];
+  const rawToken = header.split(" ")[1];
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.userId = decoded.userId;
+    const payload = jwt.verify(rawToken, process.env.JWT_SECRET);
+    req.userId = payload.userId;
     next();
-  } catch (error) {
-    return res.status(401).json({ message: "Invalid token" });
+  } catch (_) {
+    return res.status(401).json({ message: "Token expired or invalid" });
   }
-};
+}
 
-export default protect;
+export default verifyAccess;

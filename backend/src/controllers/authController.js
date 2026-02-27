@@ -1,73 +1,88 @@
+/*
+ * authController.js — handles student sign-up and sign-in
+ * Issues JWT tokens upon successful authentication
+ */
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import Student from "../models/Student.js";
+import StudentModel from "../models/Student.js";
 
-const generateToken = (userId) =>
-  jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: "7d" });
+/* Helper: mint a signed JWT for the given user id */
+function mintToken(uid) {
+  return jwt.sign({ userId: uid }, process.env.JWT_SECRET, { expiresIn: "7d" });
+}
 
-export const register = async (req, res) => {
+/* POST /api/auth/register — create a new student account */
+export async function register(req, res) {
   try {
     const { name, email, password } = req.body;
 
+    /* validate presence of all required fields */
     if (!name || !email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
+      return res.status(400).json({ message: "Please fill in every field" });
     }
 
-    const existingStudent = await Student.findOne({ email });
-    if (existingStudent) {
-      return res.status(400).json({ message: "Email already registered" });
+    /* guard against duplicate emails */
+    const duplicate = await StudentModel.findOne({ email });
+    if (duplicate) {
+      return res.status(400).json({ message: "This email is already taken" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    /* hash the raw password before persisting */
+    const saltRounds = 10;
+    const encryptedPwd = await bcrypt.hash(password, saltRounds);
 
-    const student = await Student.create({
+    const freshStudent = await StudentModel.create({
       name,
       email,
-      password: hashedPassword,
+      password: encryptedPwd,
     });
 
     return res.status(201).json({
-      message: "Registered successfully",
-      token: generateToken(student._id),
+      message: "Account created",
+      token: mintToken(freshStudent._id),
       student: {
-        id: student._id,
-        name: student.name,
-        email: student.email,
+        id: freshStudent._id,
+        name: freshStudent.name,
+        email: freshStudent.email,
       },
     });
-  } catch (error) {
-    return res.status(500).json({ message: "Server error" });
+  } catch (exc) {
+    console.error("register →", exc.message);
+    return res.status(500).json({ message: "Internal server error" });
   }
-};
+}
 
-export const login = async (req, res) => {
+/* POST /api/auth/login — authenticate existing student */
+export async function login(req, res) {
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ message: "Email and password are required" });
+      return res.status(400).json({ message: "Credentials are required" });
     }
 
-    const student = await Student.findOne({ email });
-    if (!student) {
-      return res.status(400).json({ message: "Invalid credentials" });
+    const foundStudent = await StudentModel.findOne({ email });
+    if (!foundStudent) {
+      return res.status(400).json({ message: "Wrong email or password" });
     }
 
-    const isMatch = await bcrypt.compare(password, student.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: "Invalid credentials" });
+    /* compare the submitted password against the stored hash */
+    const passwordOk = await bcrypt.compare(password, foundStudent.password);
+    if (!passwordOk) {
+      return res.status(400).json({ message: "Wrong email or password" });
     }
 
     return res.status(200).json({
-      message: "Login successful",
-      token: generateToken(student._id),
+      message: "Signed in",
+      token: mintToken(foundStudent._id),
       student: {
-        id: student._id,
-        name: student.name,
-        email: student.email,
+        id: foundStudent._id,
+        name: foundStudent.name,
+        email: foundStudent.email,
       },
     });
-  } catch (error) {
-    return res.status(500).json({ message: "Server error" });
+  } catch (exc) {
+    console.error("login →", exc.message);
+    return res.status(500).json({ message: "Internal server error" });
   }
-};
+}
