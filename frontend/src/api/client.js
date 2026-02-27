@@ -1,7 +1,9 @@
 
 import axios from "axios";
 
-const BASE = (import.meta.env.VITE_API_URL || "http://localhost:5000").replace(/\/$/, "");
+const resolvedBase = import.meta.env.VITE_API_URL
+  || (import.meta.env.DEV ? "http://localhost:5000" : "");
+const BASE = resolvedBase.replace(/\/$/, "");
 
 const httpClient = axios.create({ baseURL: BASE });
 
